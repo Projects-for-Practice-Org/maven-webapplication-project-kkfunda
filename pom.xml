@@ -21,9 +21,9 @@
 		<spring.version>5.3.34</spring.version>
 		<junit.version>4.11</junit.version>
 		<log4j.version>1.2.17</log4j.version>
-		<sonar.host.url>http://34.203.249.95:9000/</sonar.host.url>
+		<sonar.host.url>http://3.84.154.23:9000/</sonar.host.url>
 		<sonar.login>admin</sonar.login>
-		<sonar.password>Appaji</sonar.password> 
+		<sonar.password>appaji</sonar.password> 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
@@ -98,13 +98,13 @@
 	    <repository>
 	      <id>nexus</id>
 	      <name>Appaji DevOps Releases Nexus Repository</name>
-	      <url>http://3.87.212.75:8081/repository/jio-Release/</url>
+	      <url>http://3.88.137.154:8081/repository/Jio-release/</url>
 	    </repository>
 	    
 	    <snapshotRepository>
 	      <id>nexus</id>
 	      <name>Appaji DevOps Snapshot Nexus Repository </name>
-	      <url>http://3.87.212.75:8081/repository/Jio-snapshot/</url>
+	      <url>http://3.88.137.154:8081/repository/Jio-snapshot/</url>
 	    </snapshotRepository>
 	    
 	</distributionManagement>
