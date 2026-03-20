@@ -54,5 +54,5 @@ def notifyBuild(String buildStatus = 'STARTED')
     }else if (buildStatus == 'SUCCESS'){
         colorCode = "#00FF00"
     }
-    slackSend(color: colorCode, message: summary, channel: '#devops-practice-channel')
+    slackSend(color: colorCode, message: summary, channel: '#devops-channel')
   }
