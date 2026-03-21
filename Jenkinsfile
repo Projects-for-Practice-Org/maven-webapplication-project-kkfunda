@@ -3,7 +3,7 @@ node{
     try{
     stage('Git Checkout')
     {
-        notifyBuild('START')
+        notifyBuild('STARTED')
         git branch: 'dev', credentialsId: 'd82d8b60-7443-4078-b374-a44e98f876cc', 
         url: 'https://github.com/Projects-for-Practice-Org/maven-webapplication-project-kkfunda.git'
     }
@@ -45,11 +45,11 @@ def notifyBuild(String buildStatus = 'STARTED')
     buildStatus = buildStatus ?: 'SUCCESS'
     
     //Default Values
-    colorCode = '#FF0000' //Red Color
+    colorCode = "#FF0000" //Red Color
     def jobStatus = "${buildStatus} : Job Name and Build Number is: ${env.JOB_NAME} ${env.BUILD_NUMBER}"
     def summary = "${jobStatus} ${env.BUILD_URL}"
     
-    if(buildStatus == 'START'){
+    if(buildStatus == 'STARTED'){
         colorCode = "#FFFF00"
     }else if (buildStatus == 'SUCCESS'){
         colorCode = "#00FF00"
