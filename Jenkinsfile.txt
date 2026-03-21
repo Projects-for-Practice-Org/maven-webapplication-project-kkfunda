@@ -1,14 +1,23 @@
-pipeline{
+pipeline
+{
 agent any
-tools{
+tools
+{
 maven "Maven-3.9.9"
+}
+triggers 
+    {
+  githubPush()
+}
+parameters {
+  choice choices: ['master', 'dev', 'qa', 'uat', 'f1'], description: 'These are branches in Github  in my project', name: 'Branches '
 }
 
 stages{
 stage('Start'){
     steps{
         script{
-            notifyBuild('STARTED')
+            slackNotify(currentBuild.result)
         }
     }
 }
@@ -48,20 +57,31 @@ stage('Deploy into Tomcat'){
 post{
     success{
         script{
-            notifyBuild('SUCCESS')
+            slackNotify(currentBuild.result)  //Success
         }
     }
     failure{
         script{
-            notifyBuild('FAILURE')
+            slackNotify(currentBuild.result)  //Failure
         }
     }
+    unstable {
+        script{
+            slackNotify(currentBuild.result)
+        }
+  }
+  aborted {
+        script{
+            slackNotify(currentBuild.result)
+        }
+  }
+
 }
 }
 
 
-def notifyBuild(String buildStatus = 'STARTED'){
-        buildStatus = buildStatus ?: 'SUCCESS'
+def slackNotify(String buildStatus = 'STARTED'){
+        buildStatus = buildStatus ?: 'STARTED'
         //Default values
         colorCode = "#FF0000" //Red Color
         result = "${buildStatus}: JobName&BuildNo&BuildURL --> ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
@@ -71,7 +91,10 @@ def notifyBuild(String buildStatus = 'STARTED'){
         }
         else if(buildStatus == 'SUCCESS'){
             colorCode = "#00FF00"
-        }                
+        } 
+        else if(buildStatus == 'ABORTED' || buildStatus == 'UNSTABLE')
+        {
+            colorCode = "#27F5F5"
+        }
        slackSend(color: colorCode, message: result,channel: '#devops-channel') 
-    
 }
