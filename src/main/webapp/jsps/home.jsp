@@ -46,7 +46,7 @@
 <body>
 
 <header>
-     <h1> WELCOME TO KK FUNDA DEVOPS, Dclarative Piplines</h1> 
+     <h1> WELCOME TO KK FUNDA DEVOPS</h1> 
     <h3>Training | Development | Consulting</h3>
 </header>
 
