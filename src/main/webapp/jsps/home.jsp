@@ -46,7 +46,7 @@
 <body>
 
 <header>
-     <h1> WELCOME TO KK FUNDA DEVOPS, It is Github-webhook</h1> 
+     <h1> WELCOME TO KK FUNDA DEVOPS</h1> 
     <h3>Training | Development | Consulting</h3>
 </header>
 
