@@ -98,13 +98,13 @@
 	    <repository>
 	      <id>nexus</id>
 	      <name>Appaji DevOps Releases Nexus Repository</name>
-	      <url>http://13.220.158.237:8081/repository/Jio-release/</url>
+	      <url>http://44.211.176.202:8081/repository/Jio-release/</url>
 	    </repository>
 	    
 	    <snapshotRepository>
 	      <id>nexus</id>
 	      <name>Appaji DevOps Snapshot Nexus Repository </name>
-	      <url>http://13.220.158.237:8081/repository/Jio-snapshot/</url>
+	      <url>http://44.211.176.202:8081/repository/Jio-snapshot/</url>
 	    </snapshotRepository>
 	    
 	</distributionManagement>
