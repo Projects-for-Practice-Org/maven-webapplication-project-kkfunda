@@ -1,0 +1,100 @@
+pipeline
+{
+agent any
+tools
+{
+maven "Maven-3.9.9"
+}
+triggers 
+    {
+  githubPush()
+}
+parameters {
+  choice choices: ['master', 'dev', 'qa', 'uat', 'f1'], description: 'These are branches in Github  in my project', name: 'Branches '
+}
+
+stages{
+stage('Start'){
+    steps{
+        script{
+            slackNotify(currentBuild.result)
+        }
+    }
+}
+
+stage('git checkout'){
+    steps{
+       git branch: 'dev', credentialsId: 'd82d8b60-7443-4078-b374-a44e98f876cc', 
+       url: 'https://github.com/Projects-for-Practice-Org/maven-webapplication-project-kkfunda.git'
+    }
+}
+stage('Build Artifactory'){
+    steps{
+        sh "mvn clean package"
+    }
+}
+stage('SonarQube Report'){
+    steps{
+        sh "mvn sonar:sonar"
+    }
+}
+stage('Artifactory store into Nexus Repository'){
+    steps{
+        sh "mvn deploy"
+    }
+}
+stage('Deploy into Tomcat'){
+    steps{
+        sh """
+        curl -u appaji:appaji \
+        --upload-file /var/lib/jenkins/workspace/Declarative-Job/target/maven-web-application.war \
+        "http://98.81.255.43:8080/manager/text/deploy?path=/maven-web-application&update=true"
+        """
+    }
+}
+}
+
+post{
+    success{
+        script{
+            slackNotify(currentBuild.result)  //Success
+        }
+    }
+    failure{
+        script{
+            slackNotify(currentBuild.result)  //Failure
+        }
+    }
+    unstable {
+        script{
+            slackNotify(currentBuild.result)
+        }
+  }
+  aborted {
+        script{
+            slackNotify(currentBuild.result)
+        }
+  }
+
+}
+}
+
+
+def slackNotify(String buildStatus = 'STARTED'){
+        buildStatus = buildStatus ?: 'STARTED'
+        //Default values
+        colorCode = "#FF0000" //Red Color
+        result = "${buildStatus}: JobName&BuildNo&BuildURL --> ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
+        
+        if(buildStatus == 'STARTED'){
+            colorCode = "#FFFF00"  //Yellow Color
+        }
+        else if(buildStatus == 'SUCCESS'){
+            colorCode = "#00FF00"
+        } 
+        else if(buildStatus == 'ABORTED' || buildStatus == 'UNSTABLE')
+        {
+            colorCode = "#27F5F5"
+        }
+       slackSend(color: colorCode, message: result,channel: '#devops-channel') 
+}
