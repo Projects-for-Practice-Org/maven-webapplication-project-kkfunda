@@ -10,7 +10,9 @@ triggers
   githubPush()
 }
 parameters {
-  choice choices: ['master', 'dev', 'qa', 'uat', 'f1'], description: 'These are branches in Github  in my project', name: 'Branches '
+  name: 'BRANCH',
+  choice choices: ['master', 'dev', 'qa', 'uat', 'f1'], 
+  description: 'These are branches in Github  in my project', name: 'Branches '
 }
 
 stages{
@@ -85,6 +87,7 @@ def slackNotify(String buildStatus = 'STARTED'){
         //Default values
        def colorCode = "#FF0000" //Red Color
        def result = "${buildStatus}: JobName&BuildNo&BuildURL --> ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
+       def channelName = "#devops-practice-channel"
         
         if(buildStatus == 'STARTED'){
             colorCode = "#FFFF00"  //Yellow Color
@@ -96,7 +99,19 @@ def slackNotify(String buildStatus = 'STARTED'){
         {
             colorCode = "#27F5F5"
         }
-       slackSend(color: colorCode, message: result,channel: '#devops-channel') 
+
+     //slack Notifications can take dynamically based on branch
+
+    if(params.BRANCH == 'dev'){
+        channelName = "#devops-channel"
+    }
+    else if(params.BRANCH == 'qa'){
+        channelName = "#qa-channel"
+    }
+    else if(params.BRANCH == 'uat'){
+        channelName = "#uat-channel"
+    }
+       slackSend(color: colorCode, message: result,channel: channelName) 
 }
 
 
