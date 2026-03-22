@@ -52,7 +52,7 @@ stage('Deploy into Tomcat'){
         sh """
         curl -u appaji:appaji \
         --upload-file /var/lib/jenkins/workspace/Declarative-Job/target/maven-web-application.war \
-        "http://98.81.255.43:8080/manager/text/deploy?path=/maven-web-application&update=true"
+        "http://54.243.8.28:8080/manager/text/deploy?path=/maven-web-application&update=true"
         """
     }
 }
