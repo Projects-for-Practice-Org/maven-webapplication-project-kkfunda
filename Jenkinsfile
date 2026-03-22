@@ -10,7 +10,11 @@ triggers
   githubPush()
 }
 parameters {
-  choice choices: ['master', 'dev', 'qa', 'uat', 'f1'], description: 'These are branches in Github  in my project', name: 'Branches '
+  choice(
+    name: 'BRANCH',
+    choices: ['master', 'dev', 'qa', 'uat', 'f1'],
+    description: 'These are branches in Github in my project'
+  )
 }
 
 stages{
@@ -24,7 +28,7 @@ stage('Start'){
 
 stage('git checkout'){
     steps{
-       git branch: params['Branches '], credentialsId: 'd82d8b60-7443-4078-b374-a44e98f876cc', 
+       git branch: params.BRANCH, credentialsId: 'd82d8b60-7443-4078-b374-a44e98f876cc', 
        url: 'https://github.com/Projects-for-Practice-Org/maven-webapplication-project-kkfunda.git'
     }
 }
@@ -48,7 +52,7 @@ stage('Deploy into Tomcat'){
         sh """
         curl -u appaji:appaji \
         --upload-file /var/lib/jenkins/workspace/Declarative-Job/target/maven-web-application.war \
-        "http://98.81.255.43:8080/manager/text/deploy?path=/maven-web-application&update=true"
+        "http://54.243.8.28:8080/manager/text/deploy?path=/maven-web-application&update=true"
         """
     }
 }
@@ -83,8 +87,9 @@ post{
 def slackNotify(String buildStatus = 'STARTED'){
         buildStatus = buildStatus ?: 'STARTED'
         //Default values
-        def colorCode = "#FF0000" //Red Color
-        def result = "${buildStatus}: JobName&BuildNo&BuildURL --> ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
+       def colorCode = "#FF0000" //Red Color
+       def result = "${buildStatus}: JobName&BuildNo&BuildURL --> ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
+       def channelName = "#devops-practice-channel"
         
         if(buildStatus == 'STARTED'){
             colorCode = "#FFFF00"  //Yellow Color
@@ -96,5 +101,16 @@ def slackNotify(String buildStatus = 'STARTED'){
         {
             colorCode = "#27F5F5"
         }
-       slackSend(color: colorCode, message: result,channel: '#devops-channel') 
+
+     //slack Notifications can take dynamically based on branch
+    if(params.BRANCH == 'dev'){
+        channelName = "#dev-channel"
+    }
+    else if(params.BRANCH == 'qa'){
+        channelName = "#qa-channel"
+    }
+    else if(params.BRANCH == 'uat'){
+        channelName = "#uat-channel"
+    }
+       slackSend(color: colorCode, message: result,channel: channelName) 
 }
