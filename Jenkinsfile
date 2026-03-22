@@ -83,8 +83,8 @@ post{
 def slackNotify(String buildStatus = 'STARTED'){
         buildStatus = buildStatus ?: 'STARTED'
         //Default values
-        colorCode = "#FF0000" //Red Color
-        result = "${buildStatus}: JobName&BuildNo&BuildURL --> ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
+        def colorCode = "#FF0000" //Red Color
+        def result = "${buildStatus}: JobName&BuildNo&BuildURL --> ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
         
         if(buildStatus == 'STARTED'){
             colorCode = "#FFFF00"  //Yellow Color
