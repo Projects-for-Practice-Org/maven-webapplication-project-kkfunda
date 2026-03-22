@@ -12,7 +12,7 @@ triggers
 parameters {
   name: 'BRANCH',
   choice choices: ['master', 'dev', 'qa', 'uat', 'f1'], 
-  description: 'These are branches in Github  in my project', name: 'Branches '
+  description: 'These are branches in Github  in my project'
 }
 
 stages{
@@ -26,7 +26,7 @@ stage('Start'){
 
 stage('git checkout'){
     steps{
-       git branch: params['Branches '], credentialsId: 'd82d8b60-7443-4078-b374-a44e98f876cc', 
+       git branch: params.BRANCH, credentialsId: 'd82d8b60-7443-4078-b374-a44e98f876cc', 
        url: 'https://github.com/Projects-for-Practice-Org/maven-webapplication-project-kkfunda.git'
     }
 }
@@ -101,9 +101,8 @@ def slackNotify(String buildStatus = 'STARTED'){
         }
 
      //slack Notifications can take dynamically based on branch
-
     if(params.BRANCH == 'dev'){
-        channelName = "#devops-channel"
+        channelName = "#dev-channel"
     }
     else if(params.BRANCH == 'qa'){
         channelName = "#qa-channel"
