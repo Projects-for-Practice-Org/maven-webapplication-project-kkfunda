@@ -10,9 +10,11 @@ triggers
   githubPush()
 }
 parameters {
-  name: 'BRANCH',
-  choice choices: ['master', 'dev', 'qa', 'uat', 'f1'], 
-  description: 'These are branches in Github  in my project'
+  choice(
+    name: 'BRANCH',
+    choices: ['master', 'dev', 'qa', 'uat', 'f1'],
+    description: 'These are branches in Github in my project'
+  )
 }
 
 stages{
