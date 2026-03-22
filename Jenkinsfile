@@ -24,7 +24,7 @@ stage('Start'){
 
 stage('git checkout'){
     steps{
-       git branch: 'dev', credentialsId: 'd82d8b60-7443-4078-b374-a44e98f876cc', 
+       git branch: params['Branches '], credentialsId: 'd82d8b60-7443-4078-b374-a44e98f876cc', 
        url: 'https://github.com/Projects-for-Practice-Org/maven-webapplication-project-kkfunda.git'
     }
 }
